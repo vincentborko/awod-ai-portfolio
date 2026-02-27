@@ -1,0 +1,407 @@
+# Masterbriefing - AI Creative Portfolio & Booking Website
+
+Version: v1.0  
+Datum: <<2026.02.23>>  
+Projektname: <<Awod.Ai-Portfolio>>
+
+So nutzt du dieses Briefing:
+1. Ersetze alle `<<...>>` Felder mit deinen echten Infos.
+2. Lass Felder leer, wenn noch offen, und markiere sie mit `OFFEN`.
+3. Verlinke Assets mit klaren Pfaden/URLs.
+4. Sende mir diese Datei zurück, dann starte ich direkt mit Struktur, Copy und Umsetzung.
+
+---
+
+## 1) Projektziel & Erfolg
+
+Hauptziel (1 Satz):  
+<<Ich möchte meine Arbeit zeigen aber auch Seriös und Creativ Wirken auf den Kunden um Kunden zu Akquirieren>>
+
+Sekundärziel(e):  
+<<Platform für Interessen oder neue Creatives bilden um zu Connecten>>
+
+Business-Ziel in Zahlen (z. B. qualifizierte Leads/Monat, Buchungen/Monat):  
+<<ich möchte mindestens 100 Qualifizierte leads im Monat bekommen von den ich mir dann aussuchen kann wen ich bearbeite >>
+
+Definition von "qualifiziertem Lead":  
+<<Leads die einen Booking buchen und auch die Finanzielle Struktur verstehen die ein wirkliches Interesse haben und auch bereit sind den Preis zu zahlen>>
+
+Top 3 KPIs:
+1. <<Kontaktanfragen>>
+2. <<Conversion Rate der Portfolio-Seite>>
+3. <<Scroll-Tiefe>>
+
+---
+
+## 2) Angebot & Positionierung
+
+Positionierung in 1-2 Sätzen (Warum du, für wen, mit welchem Outcome):  
+<<Ich erstelle Hochwertige Werbe Assets für Unternehmen - Ich erstelle aber auch Video und Bild Assets für den Creativen Raum>>
+
+Elevator Pitch (max. 40 Wörter):  
+<<Ich kreiere AI-gestützte Video- und Visual-Assets, die wie Premium-Produktion wirken, aber schneller geliefert werden. Von Konzept bis finalen Clips: klare Story, saubere Shots, konsistenter Look. Ideal für Ads, Social und Launches.>>
+
+Kernversprechen (Transformation statt Tätigkeit):  
+<<Aus vagen Ideen mache ich kampagnenfertige AI-Visuals, die sich wie Premium-Produktion anfühlen – schnell, konsistent, markentauglich.>>
+
+Abgrenzung zum Wettbewerb (Was du bewusst NICHT machst):  
+<<Ich arbeite nicht ohne Ziel (Hook/Message/CTA) – Visuals müssen eine Funktion erfüllen>>
+
+---
+
+## 3) Zielgruppen
+
+### Zielgruppe A (z. B. Agenturen)
+Beschreibung:  
+<<Agenturen für Werbung - Creatives oder Künstler - aber auch einzelne Personen wie Musiker oder Creative die AI als Asset verstehen aber nicht ganz greifen oder Benutzen können>>
+
+Typische Probleme:  
+<<Verständnis von AI Tools und was Möglich oder nicht Möglich ist- Angst davor das die AI welt sich zu schnell bewegt und man auf der Strecke bleibt>>
+
+Wünsche/Ziele:  
+<<Schnelle Assets für wenig aufwand aber trotzdem in einer hohen Qualität >>
+
+Einwände vor Buchung:  
+<<Offen weiß nciht genau>>
+
+Kauftrigger:  
+<<Überzeugnung von Arbeit>>
+
+
+## 4) Services, Pakete, Preise - diesen abschnitt möchte ich offen lassen - die leute sollen ein Buchung Callen ich möchte die Preise nciht offen legen. 	
+
+Service 1:
+- Name: <<Offen >>
+- Für wen: <<...>>
+- Ergebnis/Outcome: <<...>>
+- Umfang (Deliverables): <<...>>
+- Dauer: <<...>>
+- Preislogik (Fixpreis, Retainer, Start-ab): <<...>>
+- Preis/Range: <<...>>
+- Nicht enthalten: <<...>>
+
+Service 2:
+- Name: <<...>>
+- Für wen: <<...>>
+- Ergebnis/Outcome: <<...>>
+- Umfang (Deliverables): <<...>>
+- Dauer: <<...>>
+- Preislogik: <<...>>
+- Preis/Range: <<...>>
+- Nicht enthalten: <<...>>
+
+Service 3:
+- Name: <<...>>
+- Für wen: <<...>>
+- Ergebnis/Outcome: <<...>>
+- Umfang (Deliverables): <<...>>
+- Dauer: <<...>>
+- Preislogik: <<...>>
+- Preis/Range: <<...>>
+- Nicht enthalten: <<...>>
+
+---
+
+## 5) Portfolio-Cases (3-8 Cases empfohlen)
+
+### Case 1
+Case-Name: <<Cafe de Enrico>>
+
+Kunde/Branche (falls anonym, wie darstellen?):  
+<<Cafe de Enrico ist ein bekanntest und geliebtes Cafe in Schöneberg da wurden schon einige assets erstellt wie video und bilder >>
+
+Ausgangslage / Problem:  
+<<Mehr assets mit Qualität die Mit der zeit gehen>>
+
+Lösung / Vorgehen:  
+<<Durch Creative Lösung und Marktrecherche wurden assets erstellen die den Character des Unternehmens verstärken und hervorheben>>
+
+Ergebnisse (mit Zahlen):  
+<<Offen>>
+
+Verwendete Formate (z. B. Video, UGC, Ads, Prompt Systems):  
+<<hier für wurden Videos oder Bilder für instagram esrstlellt>>
+
+Freigabe für Veröffentlichung: `JA
+<<...>>
+
+Asset-Links (Drive/Figma/URL):  
+<<Offen>> 
+
+### Case 2
+Case-Name: <<Pech Für Dich>>
+Ausgangslage: <<Schnelle Umsetzung eines video Visuals für ein Musikvideo >>
+Lösung: <<Intensive arbeit>>
+Ergebnis: <<ein 40 Sekundier Loop von einem Visulizer für das Musikvideo>>
+Freigabe: <<JA>>
+Asset-Links: << offen >>
+
+### Case 3
+Case-Name: <<Kevkutz>>
+Ausgangslage: <<Short für Friseur - Mit AI Effekten>>
+Lösung: <<Erstellung durch video Aufnahmen Assets und Ai Editirung>>
+Ergebnis: <<15 Sekündige Shorts - für instagram>>
+Freigabe: <<Ja>>
+Asset-Links: <<Offen>>
+
+(Weitere Cases bei Bedarf ergänzen) - Hierfür würde ich dich nochmal bitten weil ich habe noch viele Videos oder Fotos die ich in die Website einbinden Möchte 
+
+---
+
+## 6) Brand & Design Direction
+
+Brand-Persönlichkeit (3-5 Adjektive):  
+<<cinematic , energetic,  high - end, aesthetic >>
+
+Gewünschte Wirkung beim ersten Eindruck:  
+<<erstaunen und Freude >>
+
+Farbwelt (Hex-Codes, Primär/Sekundär):  
+<<Die app Soll Farbtechnsich sehr simpel sein Größtenteils schwarz grau teilweise weiß aber so das es nciht überladen sit >>
+
+Typografie (falls vorhanden):  
+<<offen aber ich möchte einen Creative Bold - in der Art von Impact abe auch variablen in Text und Überschriften pass es so an wie bei den bsp websiten>>
+
+Logo-Dateien (SVG/PNG Pfade):  
+<<Offen>>
+
+Bildstil/Visual-Style (z. B. clean editorial, cinematic, tech-minimal):  
+<<Offen so wei die Bsp. Websiten>>
+
+Design-Referenzen (3-5 Links + was dir daran gefällt):  
+<< https://freshlybaked-template.framer.website/  , https://cyberfolio.framer.website/  . https://td-royfolio.framer.website/  >>
+
+No-Gos im Design:  
+<<offen>>
+
+---
+
+## 7) Sprache, Messaging, Tonalität
+
+Website-Sprache(n):  EN `  
+<<EN>>
+
+Markenstimme (z. B. klar, premium, direkt, visionär):  
+<<klar , Visionär>>
+
+Wörter/Phrasen, die du oft nutzt:  
+<<offen>>
+
+Wörter/Phrasen, die vermieden werden sollen:  
+<<offen>>
+
+Hero-Headline-Ideen (3 Varianten):  
+1. <<Cinematic AI visuals that feel real >>
+2.  <<offen überleg dir was>>
+3. <<offen überleg dir was>>
+
+CTA-Text(e) (z. B. "Strategie-Call buchen"):  
+<<Start a Project>>
+
+---
+
+## 8) Booking-Flow (sehr wichtig)
+
+Bevorzugtes Tool: `Calendly / Cal.com / TidyCal / eigenes Formular / anderes`  
+<<Calendly>>
+
+Terminarten (Name + Dauer + Zweck):
+1. <<Discovery Call (15 Min>>
+2. <<Creative Strategy Call (45 Min)>>
+
+Verfügbare Tage/Uhrzeiten + Zeitzone:  
+<<offen>>
+
+Buffer-Regeln (z. B. 15 Min. vor/nach Calls):  
+<<offen>>
+
+Qualifizierungsfragen vor Buchung:
+1. <<offen>>
+2. <<...>>
+3. <<...>>
+
+Was soll nach Buchung passieren (Automation):  
+<<offen>>
+
+No-Show/Reschedule Policy:  
+<<offen>>
+
+---
+
+## 9) Trust-Elemente
+
+Testimonials (Name, Rolle, Firma, Zitat, Link/Foto):
+1. <<offen>>
+2. <<...>>
+3. <<...>>
+
+Kundenlogos (Pfade/Links):  
+<<offen>>
+
+Zahlenbelege (z. B. Umsatz, CTR, Leads, Views):  
+<<offen>>
+
+Awards/PR/Interviews:  
+<<offen>>
+
+---
+
+## 10) SEO-Grundlage
+
+Top-Keywords (5-15):  
+<<1. AI video creator
+	2.	AI video production
+	3.	generative AI video
+	4.	AI commercial production
+	5.	AI content studio
+	6.	AI creative direction
+	7.	cinematic AI video
+	8.	AI product video
+	9.	AI ad creatives
+	10.	short-form video production
+	11.	AI motion design
+	12.	AI visuals for brands
+	13.	Veo / text-to-video creator
+	14.	AI video prompt engineering
+	15.	AI video post-production>>
+
+Regionale Relevanz (Stadt/Land/Remote):  
+<<	Remote (EU & international) >>
+
+Wettbewerber/Referenzseiten (URLs):  
+<<offen>>
+
+FAQ-Fragen, die potenzielle Kunden googeln:
+1. <<How much does AI video production cost?>>
+2. <<Is AI-generated content safe for commercial use (copyright / licensing)?>>
+3. <<How long does it take to produce an AI ad / short-form video?>>
+4. <<Can you match our brand style and keep characters consistent?>>
+5. <<What do you need from us to start (briefing, assets, references)?>>
+
+---
+
+## 11) Rechtliches - ich möchte das dies erstellt wird jedoch ohne inhalt ich weiß dasig ein Impressum bruache dass werde ich aber später erstellen 
+
+Impressum vorhanden: `JA/NEIN`  
+<<Offen>>
+
+Datenschutzerklärung vorhanden: `JA/NEIN`  
+<<Offen>>
+
+Cookie-Consent erforderlich: `JA/NEIN`  
+<<offen>>
+
+Rechtliche Hinweise zu Case-Assets / Lizenzen:  
+<<offen>>
+
+---
+
+## 12) Technik & Integrationen
+
+Bevorzugter Stack: `Webflow / Framer / Next.js / offen`  
+<<Next.js>>
+
+Hosting/Domain-Status:  
+<<offen>>
+
+Form-/CRM-Integration (z. B. HubSpot, Notion, Airtable):  
+<<offen>>
+
+Analytics (GA4, Plausible, Meta Pixel, LinkedIn Insight, etc.):  
+<<offen>>
+
+Newsletter/Email-Tool (falls relevant):  
+<<offen>>
+
+---
+
+## 13) Seitenstruktur (Sitemap)
+
+Pflichtseiten:
+1. Startseite
+2. Portfolio/Cases
+3. Leistungen
+4. About
+5. Kontakt/Booking
+6. Impressum
+7. Datenschutz
+
+Optionale Seiten:
+1. <<...>>
+2. <<...>>
+3. <<...>>
+
+---
+
+## 14) Conversion-Prioritäten
+
+Primäre Conversion (Nr. 1 Ziel):  
+<<Projektanfrage / Booking Call >>
+
+Sekundäre Conversion:  
+<<Case Study View → “Check Availability / Get Quote>>
+
+Mikro-Conversions (z. B. Scrolltiefe, Click auf Case, Download):  
+<<View Case Studies>>
+
+Wichtigste CTA-Platzierungen:
+1. <<Hero (above the fold): Primary CTA + Secondary (“See work”)>>
+2. <<Nach 1. Proof-Block (Top 3 Projekte/Logos/Testimonials): Primary CTA>>
+3. <<Am Ende jeder Case Study: “Start a project / Get a quote” + kurzer Scope-Hinweis>>
+
+---
+
+## 15) Projekt-Rahmen
+
+Deadline (fixes Datum):  
+<<...>>
+
+Budgetrahmen:  
+<<...>>
+
+Must-haves (ohne diese gilt Projekt als unvollständig):
+1. <<...>>
+2. <<...>>
+3. <<...>>
+
+Nice-to-haves:
+1. <<...>>
+2. <<...>>
+3. <<...>>
+
+Freigabeprozess (wer entscheidet final, in welchen Schritten):  
+<<...>>
+
+---
+
+## 16) Asset-Checklist (zum Abhaken)
+
+`[ ]` Logo SVG  
+`[ ]` Logo PNG  
+`[ ]` Farbwerte / Brandguide  
+`[ ]` Schriftangaben  
+`[ ]` 3-8 Portfolio-Cases  
+`[ ]` Testimonials  
+`[ ]` Kundenlogos  
+`[ ]` Booking-Link/Account  
+`[ ]` Impressum  
+`[ ]` Datenschutz  
+`[ ]` Domain/Hosting-Zugang (falls nötig)  
+`[ ]` Analytics-IDs (falls nötig)
+
+---
+
+## 17) Offene Punkte / Risiken
+
+Welche Annahmen sind noch unklar?  
+<<...>>
+
+Welche Abhängigkeiten könnten den Launch verzögern?  
+<<...>>
+
+Was soll ich entscheiden, falls etwas offen bleibt?  
+<<...>>
+
+---
+
+
