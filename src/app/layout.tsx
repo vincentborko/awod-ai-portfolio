@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Space_Grotesk } from "next/font/google";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SiteHeader } from "@/components/site-header";
 import { UiMotionController } from "@/components/ui-motion-controller";
 import { seoKeywords, site } from "@/data/site";
 import "./globals.css";
-
-const headingFont = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-heading",
-});
-
-const bodyFont = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-body",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? site.siteUrl),
@@ -56,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${headingFont.variable} ${bodyFont.variable}`}>
+      <body>
         <UiMotionController />
         <ScrollProgress />
         <SiteHeader />
