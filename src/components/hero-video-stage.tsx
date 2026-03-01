@@ -238,7 +238,7 @@ export function HeroVideoStage() {
         </p>
         <div className="hero-cta-row">
           <Link className="button-primary" href="/contact">
-            Start a Project
+            Book a Call
           </Link>
           <Link className="button-secondary" href="/portfolio">
             View Portfolio

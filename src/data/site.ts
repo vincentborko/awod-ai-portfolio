@@ -4,7 +4,7 @@ export const site = {
   description:
     "AI-driven video and visual assets for brands, agencies, artists, and founders who need premium output at high speed.",
   siteUrl: "https://awod-ai-portfolio.vercel.app",
-  primaryCta: "Start a Project",
+  primaryCta: "Book a Call",
   secondaryCta: "See Work",
   calendlyUrl: "https://calendly.com/awodai",
   email: "Awedis.m@web.de",
@@ -101,7 +101,7 @@ export const decisionPath = [
   {
     title: "Start the project",
     detail: "Book one call, align goals, and move straight into production.",
-    action: "Book a call",
+    action: "Book a Call",
     href: "/contact",
   },
 ];

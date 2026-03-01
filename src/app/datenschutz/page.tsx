@@ -4,6 +4,9 @@ import { SiteFooter } from "@/components/site-footer";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "Privacy policy according to GDPR and TDDDG.",
+  alternates: {
+    canonical: "/datenschutz",
+  },
 };
 
 export default function PrivacyPolicyPage() {

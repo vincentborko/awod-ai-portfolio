@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "Portfolio",
   description:
     "Selected AI creative projects, showreel videos, and case references for brands, artists, and agencies.",
+  alternates: {
+    canonical: "/portfolio",
+  },
 };
 
 export default function PortfolioPage() {
@@ -32,15 +35,15 @@ export default function PortfolioPage() {
           <div className="shell page-hero">
             <p className="home-chapter-tag">Chapter 02</p>
             <p className="section-kicker">Portfolio</p>
-            <h1 className="section-title">Proof-Led AI Case Studies</h1>
+            <h1 className="section-title">See the work. Then book with confidence.</h1>
             <p className="section-copy">
-              Structured work samples for agencies, artists, and brands. Each
-              case is presented in a clear project arc: challenge, production
-              system, and delivered outcome.
+              Real client outputs, clear outcomes, and production quality you
+              can verify in minutes. If the fit is right, book one call and we
+              map your next asset sprint.
             </p>
             <div className="hero-cta-row">
               <Link className="button-primary" href="/contact">
-                Start a Project
+                Book a Call
               </Link>
               <Link className="button-secondary" href="/services">
                 Service Scope
@@ -122,7 +125,7 @@ export default function PortfolioPage() {
                 visual systems with fast review loops and platform-ready delivery.
               </p>
               <Link className="button-secondary" href="/contact">
-                Book Strategy Call
+                Book a Call
               </Link>
             </div>
           </div>

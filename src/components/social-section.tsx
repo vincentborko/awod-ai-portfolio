@@ -22,10 +22,17 @@ export function SocialSection() {
                 href={social.href}
                 target="_blank"
                 rel="noreferrer"
+                aria-label={`Open ${social.label} profile (${social.value})`}
               >
+                <span className="social-card-intent">Click to open</span>
                 <strong>{social.label}</strong>
-                <span>{social.value}</span>
-                <p>Open channel</p>
+                <span className="social-handle">{social.value}</span>
+                <span className="social-card-action">
+                  Open channel
+                  <span className="social-card-arrow" aria-hidden>
+                    ↗
+                  </span>
+                </span>
               </a>
             ))}
           </div>

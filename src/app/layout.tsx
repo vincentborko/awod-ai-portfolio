@@ -25,9 +25,6 @@ export const metadata: Metadata = {
   },
   description: site.description,
   keywords: seoKeywords,
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: "AWOD.AI | Cinematic AI Portfolio",
     description: site.description,

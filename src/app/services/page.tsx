@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: "Services",
   description:
     "AI commercial assets, cinematic short-form production, and creative systems for scalable content output.",
+  alternates: {
+    canonical: "/services",
+  },
 };
 
 export default function ServicesPage() {
@@ -60,10 +63,10 @@ export default function ServicesPage() {
             <div>
               <p className="home-chapter-tag">Chapter 03</p>
               <p className="section-kicker">Next Step</p>
-              <h2 className="section-title">Book a discovery call.</h2>
+              <h2 className="section-title">Book a Call.</h2>
             </div>
             <Link className="button-primary" href="/contact">
-              Book Now
+              Book a Call
             </Link>
           </div>
         </section>

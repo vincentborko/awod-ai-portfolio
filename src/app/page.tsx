@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   title: "Home",
   description:
     "Cinematic AI visuals for agencies, founders, and artists. Explore portfolio, services, and direct booking.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function Home() {
@@ -115,7 +118,7 @@ export default function Home() {
                 <h2 className="section-title">Three steps from first impression to project start.</h2>
               </div>
               <Link className="button-primary" href="/contact">
-                Start With a Call
+                Book a Call
               </Link>
             </div>
             <div className="home-path-grid">
@@ -215,7 +218,7 @@ export default function Home() {
             </div>
             <div className="hero-cta-row">
               <Link className="button-primary" href="/contact">
-                Start a Project
+                Book a Call
               </Link>
               <Link className="button-secondary" href="/services">
                 Explore Services

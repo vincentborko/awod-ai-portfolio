@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "Booking",
   description:
     "Book discovery and strategy calls directly on-site with inline Calendly scheduling.",
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default function ContactPage() {
@@ -18,7 +21,7 @@ export default function ContactPage() {
           <div className="shell page-hero">
             <p className="home-chapter-tag">Chapter 01</p>
             <p className="section-kicker">Booking</p>
-            <h1 className="section-title">Start a Project Call</h1>
+            <h1 className="section-title">Book a Call</h1>
             <p className="section-copy">
               Book a discovery or strategy call. We align on goals, required
               deliverables, and timeline before project start.

@@ -4,6 +4,9 @@ import { SiteFooter } from "@/components/site-footer";
 export const metadata: Metadata = {
   title: "Legal Notice",
   description: "Provider identification and contact details.",
+  alternates: {
+    canonical: "/impressum",
+  },
 };
 
 export default function LegalNoticePage() {
