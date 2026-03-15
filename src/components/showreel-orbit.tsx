@@ -78,7 +78,9 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
       // Convert release velocity (px/s) to deg/s, subtract base so spring decays to 0
       const releaseDegPerS = info.velocity.x * DRAG_VELOCITY_SCALE;
       const boost = releaseDegPerS - BASE_VELOCITY;
-      dragBoostTarget.set(boost);
+      // Jump spring to boost value instantly, then let it decay back to 0
+      dragBoost.jump(boost);
+      dragBoostTarget.set(0);
     },
     [dragBoostTarget],
   );
