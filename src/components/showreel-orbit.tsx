@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useCallback, type CSSProperties } from "react";
-import { motion, useMotionValue, useTransform, animate, type PanInfo } from "motion/react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  animate,
+  type PanInfo,
+  type AnimationPlaybackControls,
+} from "motion/react";
 
 type ShowreelVideo = {
   title: string;
@@ -24,59 +31,44 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const [ratios, setRatios] = useState<Record<string, number>>({});
   const [isDragging, setIsDragging] = useState(false);
 
-  // Single motion value drives everything — no spring wrapper
   const rotation = useMotionValue(0);
   const orbitDeg = useTransform(rotation, (v) => `${v.toFixed(2)}deg`);
 
-  // Track auto-rotation state
-  const lastTimeRef = useRef(0);
-  const isDraggingRef = useRef(false);
-  const momentumActiveRef = useRef(false);
-  // Blend factor ramps 0 → 1 over RAMP_MS after momentum/drag ends
-  const autoBlendRef = useRef(1);
-  const RAMP_MS = 600;
+  // Keep a handle to the current auto-rotation animation
+  const autoAnimRef = useRef<AnimationPlaybackControls | null>(null);
 
-  // Auto-rotation via rAF — ramps in smoothly after drag/momentum
-  useEffect(() => {
-    let frameId = 0;
-    lastTimeRef.current = performance.now();
-
-    const tick = (now: number) => {
-      const dt = (now - lastTimeRef.current) / 1000;
-      lastTimeRef.current = now;
-
-      const active = isDraggingRef.current || momentumActiveRef.current;
-
-      if (active) {
-        autoBlendRef.current = 0;
-      } else {
-        // Ramp blend from 0 → 1
-        autoBlendRef.current = Math.min(1, autoBlendRef.current + dt / (RAMP_MS / 1000));
-      }
-
-      if (!active) {
-        const increment = AUTO_SPEED * dt * autoBlendRef.current;
-        rotation.set(rotation.get() + increment);
-      }
-
-      frameId = requestAnimationFrame(tick);
-    };
-
-    frameId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frameId);
+  const startAutoRotation = useCallback(() => {
+    // Start a long linear animation from current position
+    const current = rotation.get();
+    const target = current + 360 * 100; // enough for ~100 full loops
+    autoAnimRef.current = animate(rotation, target, {
+      duration: (360 * 100) / AUTO_SPEED,
+      ease: "linear",
+      repeat: 0,
+    });
   }, [rotation]);
+
+  const stopAutoRotation = useCallback(() => {
+    if (autoAnimRef.current) {
+      autoAnimRef.current.stop();
+      autoAnimRef.current = null;
+    }
+  }, []);
+
+  // Start auto-rotation on mount
+  useEffect(() => {
+    startAutoRotation();
+    return () => stopAutoRotation();
+  }, [startAutoRotation, stopAutoRotation]);
 
   // Drag handling
   const dragStartRotation = useRef(0);
 
   const onPanStart = useCallback(() => {
     setIsDragging(true);
-    isDraggingRef.current = true;
-    momentumActiveRef.current = false;
-    // Stop any running momentum animation
-    rotation.stop();
+    stopAutoRotation();
     dragStartRotation.current = rotation.get();
-  }, [rotation]);
+  }, [rotation, stopAutoRotation]);
 
   const onPan = useCallback(
     (_: unknown, info: PanInfo) => {
@@ -88,38 +80,30 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const onPanEnd = useCallback(
     (_: unknown, info: PanInfo) => {
       setIsDragging(false);
-      isDraggingRef.current = false;
-
       const velocityDeg = info.velocity.x * DRAG_SENSITIVITY;
 
       if (Math.abs(velocityDeg) > 5) {
-        // Momentum: animate from current position with fling velocity
-        momentumActiveRef.current = true;
-        const current = rotation.get();
-        const target = current + velocityDeg * 0.4;
-
-        animate(rotation, target, {
+        animate(rotation, rotation.get() + velocityDeg * 0.4, {
           type: "decay",
           velocity: velocityDeg,
           power: 0.4,
           timeConstant: 200,
-          onComplete: () => {
-            momentumActiveRef.current = false;
-          },
+          onComplete: () => startAutoRotation(),
         });
+      } else {
+        startAutoRotation();
       }
     },
-    [rotation],
+    [rotation, startAutoRotation],
   );
 
-  const pauseAutoRotation = useCallback(
-    (ms = 1200) => {
-      momentumActiveRef.current = true;
-      setTimeout(() => {
-        momentumActiveRef.current = false;
-      }, ms);
+  const onCardClick = useCallback(
+    (index: number) => {
+      setActiveIndex(index);
+      stopAutoRotation();
+      setTimeout(() => startAutoRotation(), 1200);
     },
-    [],
+    [stopAutoRotation, startAutoRotation],
   );
 
   // Scroll-based pitch and depth
@@ -216,10 +200,7 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
                     className={`showreel-orbit-card ${orientationClass} ${activeIndex === index ? "is-active" : ""}`}
                     key={video.src}
                     aria-label={`Showreel video ${index + 1}`}
-                    onClick={() => {
-                      setActiveIndex(index);
-                      pauseAutoRotation();
-                    }}
+                    onClick={() => onCardClick(index)}
                     style={style}
                     type="button"
                   >
