@@ -42,8 +42,7 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   // Velocity boost from drag release — springs back to 0
   // Total velocity = BASE_VELOCITY + dragBoost
   // When dragBoost reaches 0, we're back to pure auto-rotation
-  const dragBoostTarget = useMotionValue(0);
-  const dragBoost = useSpring(dragBoostTarget, BOOST_SPRING);
+  const dragBoost = useSpring(0, BOOST_SPRING);
 
   const isDraggingRef = useRef(false);
 
@@ -59,9 +58,8 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const onPanStart = useCallback(() => {
     setIsDragging(true);
     isDraggingRef.current = true;
-    dragBoostTarget.set(0);
     dragBoost.jump(0);
-  }, [dragBoostTarget, dragBoost]);
+  }, [dragBoost]);
 
   const onPan = useCallback(
     (_: unknown, info: PanInfo) => {
@@ -78,11 +76,11 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
       // Convert release velocity (px/s) to deg/s, subtract base so spring decays to 0
       const releaseDegPerS = info.velocity.x * DRAG_VELOCITY_SCALE;
       const boost = releaseDegPerS - BASE_VELOCITY;
-      // Jump spring to boost value instantly, then let it decay back to 0
+      // Jump to boost instantly, then spring animates it back to 0
       dragBoost.jump(boost);
-      dragBoostTarget.set(0);
+      dragBoost.set(0);
     },
-    [dragBoostTarget],
+    [dragBoost],
   );
 
   const onCardClick = useCallback(
