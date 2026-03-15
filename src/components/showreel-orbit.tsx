@@ -28,13 +28,15 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const rotation = useMotionValue(0);
   const orbitDeg = useTransform(rotation, (v) => `${v.toFixed(2)}deg`);
 
-  // Track the accumulated auto-rotation offset separately
-  const autoOffsetRef = useRef(0);
+  // Track auto-rotation state
   const lastTimeRef = useRef(0);
   const isDraggingRef = useRef(false);
   const momentumActiveRef = useRef(false);
+  // Blend factor ramps 0 → 1 over RAMP_MS after momentum/drag ends
+  const autoBlendRef = useRef(1);
+  const RAMP_MS = 600;
 
-  // Auto-rotation via rAF — only adds to value when not dragging/decelerating
+  // Auto-rotation via rAF — ramps in smoothly after drag/momentum
   useEffect(() => {
     let frameId = 0;
     lastTimeRef.current = performance.now();
@@ -43,9 +45,17 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
       const dt = (now - lastTimeRef.current) / 1000;
       lastTimeRef.current = now;
 
-      if (!isDraggingRef.current && !momentumActiveRef.current) {
-        const increment = AUTO_SPEED * dt;
-        autoOffsetRef.current += increment;
+      const active = isDraggingRef.current || momentumActiveRef.current;
+
+      if (active) {
+        autoBlendRef.current = 0;
+      } else {
+        // Ramp blend from 0 → 1
+        autoBlendRef.current = Math.min(1, autoBlendRef.current + dt / (RAMP_MS / 1000));
+      }
+
+      if (!active) {
+        const increment = AUTO_SPEED * dt * autoBlendRef.current;
         rotation.set(rotation.get() + increment);
       }
 
