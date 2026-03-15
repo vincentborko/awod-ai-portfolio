@@ -21,7 +21,7 @@ type ShowreelOrbitProps = {
 
 const BASE_VELOCITY = 6; // deg/s — auto-rotation speed
 const DRAG_SENSITIVITY = 0.3; // px → deg during drag
-const DRAG_VELOCITY_SCALE = 0.3; // px/ms → deg/s on release
+const DRAG_VELOCITY_SCALE = 0.3; // px/s → deg/s on release
 
 // Spring that decays dragBoost back to 0 (= back to base velocity)
 const BOOST_SPRING = { stiffness: 50, damping: 20, restDelta: 0.01 };
@@ -75,8 +75,8 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
       setIsDragging(false);
       isDraggingRef.current = false;
 
-      // Convert release velocity (px/ms) to deg/s, subtract base so spring decays to 0
-      const releaseDegPerS = info.velocity.x * DRAG_VELOCITY_SCALE * 1000;
+      // Convert release velocity (px/s) to deg/s, subtract base so spring decays to 0
+      const releaseDegPerS = info.velocity.x * DRAG_VELOCITY_SCALE;
       const boost = releaseDegPerS - BASE_VELOCITY;
       dragBoostTarget.set(boost);
     },
