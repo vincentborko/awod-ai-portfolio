@@ -1,6 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback, type CSSProperties } from "react";
+import {
+  motion,
+  useMotionValue,
+  useSpring,
+  useAnimationFrame,
+  useTransform,
+  type PanInfo,
+} from "motion/react";
 
 type ShowreelVideo = {
   title: string;
@@ -11,116 +19,78 @@ type ShowreelOrbitProps = {
   videos: ShowreelVideo[];
 };
 
+const BASE_VELOCITY = 6; // deg/s — auto-rotation speed
+const DRAG_SENSITIVITY = 0.3; // px → deg during drag
+const DRAG_VELOCITY_SCALE = 0.3; // px/s → deg/s on release
+
+// Spring that decays dragBoost back to 0 (= back to base velocity)
+const BOOST_SPRING = { stiffness: 50, damping: 20, restDelta: 0.01 };
+
 export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const shellRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
-  const orbitRef = useRef(0);
-  const targetOrbitRef = useRef(0);
-  const draggingRef = useRef(false);
-  const lastXRef = useRef(0);
-  const interactionUntilRef = useRef(0);
   const safeVideos = useMemo(() => videos.slice(0, 12), [videos]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [ratios, setRatios] = useState<Record<string, number>>({});
+  const [isDragging, setIsDragging] = useState(false);
 
-  useEffect(() => {
-    if (!stageRef.current) return;
-    let animationFrame = 0;
-    const AUTO_SPEED = 0.1;
-    const LERP = 0.14;
+  // Rotation angle — accumulated imperatively, never animated to a target
+  const rotation = useMotionValue(0);
+  const orbitDeg = useTransform(rotation, (v) => `${v.toFixed(2)}deg`);
 
-    const tick = (now: number) => {
-      if (!draggingRef.current && now > interactionUntilRef.current) {
-        targetOrbitRef.current += AUTO_SPEED;
-      }
+  // Velocity boost from drag release — springs back to 0
+  // Total velocity = BASE_VELOCITY + dragBoost
+  // When dragBoost reaches 0, we're back to pure auto-rotation
+  const dragBoost = useSpring(0, BOOST_SPRING);
 
-      if (Math.abs(targetOrbitRef.current) > 100000) {
-        targetOrbitRef.current %= 360;
-        orbitRef.current %= 360;
-      }
+  const isDraggingRef = useRef(false);
 
-      orbitRef.current += (targetOrbitRef.current - orbitRef.current) * LERP;
-      stageRef.current?.style.setProperty("--orbit-rotation", `${orbitRef.current.toFixed(2)}deg`);
-      animationFrame = window.requestAnimationFrame(tick);
-    };
+  // Single integration loop — always running, never stops
+  useAnimationFrame((_time, delta) => {
+    if (isDraggingRef.current) return;
 
-    animationFrame = window.requestAnimationFrame(tick);
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, []);
+    const velocity = BASE_VELOCITY + dragBoost.get();
+    rotation.set(rotation.get() + velocity * (delta / 1000));
+  });
 
-  useEffect(() => {
-    const stage = stageRef.current;
-    const scene = sceneRef.current;
-    if (!stage || !scene) return;
+  // Drag handlers
+  const onPanStart = useCallback(() => {
+    setIsDragging(true);
+    isDraggingRef.current = true;
+    dragBoost.jump(0);
+  }, [dragBoost]);
 
-    const updateOrbitMetrics = () => {
-      const width = scene.clientWidth;
-      const height = scene.clientHeight;
-      const orbitRadius = Math.max(230, Math.min(width * 0.4, 620));
-      const orbitOffsetY = Math.max(10, Math.min(height * 0.065, 56));
+  const onPan = useCallback(
+    (_: unknown, info: PanInfo) => {
+      rotation.set(rotation.get() + info.delta.x * DRAG_SENSITIVITY);
+    },
+    [rotation],
+  );
 
-      stage.style.setProperty("--orbit-radius", `${orbitRadius.toFixed(1)}px`);
-      stage.style.setProperty("--orbit-offset-y", `${orbitOffsetY.toFixed(1)}px`);
-    };
+  const onPanEnd = useCallback(
+    (_: unknown, info: PanInfo) => {
+      setIsDragging(false);
+      isDraggingRef.current = false;
 
-    updateOrbitMetrics();
-    window.addEventListener("resize", updateOrbitMetrics);
+      // Convert release velocity (px/s) to deg/s, subtract base so spring decays to 0
+      const releaseDegPerS = info.velocity.x * DRAG_VELOCITY_SCALE;
+      const boost = releaseDegPerS - BASE_VELOCITY;
+      // Jump to boost instantly, then spring animates it back to 0
+      dragBoost.jump(boost);
+      dragBoost.set(0);
+    },
+    [dragBoost],
+  );
 
-    return () => {
-      window.removeEventListener("resize", updateOrbitMetrics);
-    };
-  }, []);
+  const onCardClick = useCallback(
+    (index: number) => {
+      setActiveIndex(index);
+    },
+    [],
+  );
 
-  useEffect(() => {
-    const scene = sceneRef.current;
-    const stage = stageRef.current;
-    if (!scene || !stage) return;
-
-    const updateOrbit = (delta: number) => {
-      targetOrbitRef.current += delta;
-      interactionUntilRef.current = performance.now() + 1200;
-    };
-
-    const onPointerDown = (event: PointerEvent) => {
-      if (event.button !== 0) return;
-      draggingRef.current = true;
-      lastXRef.current = event.clientX;
-      scene.classList.add("is-dragging");
-      interactionUntilRef.current = performance.now() + 3000;
-      scene.setPointerCapture(event.pointerId);
-    };
-
-    const onPointerMove = (event: PointerEvent) => {
-      if (!draggingRef.current) return;
-      const dx = event.clientX - lastXRef.current;
-      lastXRef.current = event.clientX;
-      updateOrbit(dx * 0.42);
-    };
-
-    const stopDragging = (event: PointerEvent) => {
-      if (!draggingRef.current) return;
-      draggingRef.current = false;
-      scene.classList.remove("is-dragging");
-      interactionUntilRef.current = performance.now() + 900;
-      if (scene.hasPointerCapture(event.pointerId)) {
-        scene.releasePointerCapture(event.pointerId);
-      }
-    };
-
-    scene.addEventListener("pointerdown", onPointerDown);
-    window.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", stopDragging);
-    window.addEventListener("pointercancel", stopDragging);
-
-    return () => {
-      scene.removeEventListener("pointerdown", onPointerDown);
-      window.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", stopDragging);
-      window.removeEventListener("pointercancel", stopDragging);
-    };
-  }, []);
-
+  // Scroll-based pitch and depth
   useEffect(() => {
     if (!stageRef.current) return;
 
@@ -141,11 +111,31 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
-
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
+  }, []);
+
+  // Responsive orbit radius
+  useEffect(() => {
+    const stage = stageRef.current;
+    const scene = sceneRef.current;
+    if (!stage || !scene) return;
+
+    const updateOrbitMetrics = () => {
+      const width = scene.clientWidth;
+      const height = scene.clientHeight;
+      const orbitRadius = Math.max(230, Math.min(width * 0.4, 620));
+      const orbitOffsetY = Math.max(10, Math.min(height * 0.065, 56));
+
+      stage.style.setProperty("--orbit-radius", `${orbitRadius.toFixed(1)}px`);
+      stage.style.setProperty("--orbit-offset-y", `${orbitOffsetY.toFixed(1)}px`);
+    };
+
+    updateOrbitMetrics();
+    window.addEventListener("resize", updateOrbitMetrics);
+    return () => window.removeEventListener("resize", updateOrbitMetrics);
   }, []);
 
   if (safeVideos.length === 0) return null;
@@ -165,10 +155,20 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
     <div className="showreel-shell" ref={shellRef}>
       <div className="showreel-sticky" ref={stageRef}>
         <div className="showreel-layout">
-          <div className="showreel-scene" ref={sceneRef}>
+          <motion.div
+            className={`showreel-scene ${isDragging ? "is-dragging" : ""}`}
+            ref={sceneRef}
+            onPanStart={onPanStart}
+            onPan={onPan}
+            onPanEnd={onPanEnd}
+          >
             <div className="showreel-aura" aria-hidden="true" />
             <p className="showreel-hint">Drag to rotate</p>
-            <div className="showreel-orbit" aria-label="3D showreel orbit">
+            <motion.div
+              className="showreel-orbit"
+              aria-label="3D showreel orbit"
+              style={{ "--orbit-rotation": orbitDeg } as CSSProperties & Record<string, unknown>}
+            >
               {safeVideos.map((video, index) => {
                 const ratio = ratios[video.src] ?? 9 / 16;
                 const orientationClass =
@@ -184,10 +184,7 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
                     className={`showreel-orbit-card ${orientationClass} ${activeIndex === index ? "is-active" : ""}`}
                     key={video.src}
                     aria-label={`Showreel video ${index + 1}`}
-                    onClick={() => {
-                      setActiveIndex(index);
-                      interactionUntilRef.current = performance.now() + 1200;
-                    }}
+                    onClick={() => onCardClick(index)}
                     style={style}
                     type="button"
                   >
@@ -209,8 +206,8 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
                   </button>
                 );
               })}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           <article className="showreel-focus">
             <p className="section-kicker">Focused Asset</p>
