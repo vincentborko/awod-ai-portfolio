@@ -1,14 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import {
-  motion,
-  useMotionValue,
-  useSpring,
-  useTransform,
-  animate,
-  type PanInfo,
-} from "motion/react";
+import { useEffect, useMemo, useRef, useState, useCallback, type CSSProperties } from "react";
+import { motion, useMotionValue, useTransform, animate, type PanInfo } from "motion/react";
 
 type ShowreelVideo = {
   title: string;
@@ -19,8 +12,8 @@ type ShowreelOrbitProps = {
   videos: ShowreelVideo[];
 };
 
-const SPRING_CONFIG = { damping: 40, stiffness: 120, mass: 1 };
-const AUTO_SPEED = 0.1; // degrees per frame
+const AUTO_SPEED = 6; // degrees per second
+const DRAG_SENSITIVITY = 0.42;
 
 export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const shellRef = useRef<HTMLDivElement | null>(null);
@@ -31,68 +24,93 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const [ratios, setRatios] = useState<Record<string, number>>({});
   const [isDragging, setIsDragging] = useState(false);
 
-  // Motion values for the orbit rotation
-  const rawRotation = useMotionValue(0);
-  const smoothRotation = useSpring(rawRotation, SPRING_CONFIG);
-  const orbitDeg = useTransform(smoothRotation, (v) => `${v.toFixed(2)}deg`);
+  // Single motion value drives everything — no spring wrapper
+  const rotation = useMotionValue(0);
+  const orbitDeg = useTransform(rotation, (v) => `${v.toFixed(2)}deg`);
 
-  // Auto-rotation
-  const autoRef = useRef(true);
+  // Track the accumulated auto-rotation offset separately
   const autoOffsetRef = useRef(0);
+  const lastTimeRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const momentumActiveRef = useRef(false);
 
+  // Auto-rotation via rAF — only adds to value when not dragging/decelerating
   useEffect(() => {
     let frameId = 0;
-    const tick = () => {
-      if (autoRef.current) {
-        autoOffsetRef.current += AUTO_SPEED;
-        rawRotation.set(rawRotation.get() + AUTO_SPEED);
+    lastTimeRef.current = performance.now();
+
+    const tick = (now: number) => {
+      const dt = (now - lastTimeRef.current) / 1000;
+      lastTimeRef.current = now;
+
+      if (!isDraggingRef.current && !momentumActiveRef.current) {
+        const increment = AUTO_SPEED * dt;
+        autoOffsetRef.current += increment;
+        rotation.set(rotation.get() + increment);
       }
+
       frameId = requestAnimationFrame(tick);
     };
+
     frameId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frameId);
-  }, [rawRotation]);
+  }, [rotation]);
 
-  // Pause auto-rotation after interaction, resume after delay
-  const pauseTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const pauseAutoRotation = (ms = 1200) => {
-    autoRef.current = false;
-    clearTimeout(pauseTimerRef.current);
-    pauseTimerRef.current = setTimeout(() => {
-      autoRef.current = true;
-    }, ms);
-  };
-
-  // Drag handling via framer-motion pan gesture
+  // Drag handling
   const dragStartRotation = useRef(0);
 
-  const onPanStart = () => {
+  const onPanStart = useCallback(() => {
     setIsDragging(true);
-    autoRef.current = false;
-    clearTimeout(pauseTimerRef.current);
-    dragStartRotation.current = rawRotation.get();
-  };
+    isDraggingRef.current = true;
+    momentumActiveRef.current = false;
+    // Stop any running momentum animation
+    rotation.stop();
+    dragStartRotation.current = rotation.get();
+  }, [rotation]);
 
-  const onPan = (_: unknown, info: PanInfo) => {
-    const delta = info.offset.x * 0.42;
-    rawRotation.set(dragStartRotation.current + delta);
-  };
+  const onPan = useCallback(
+    (_: unknown, info: PanInfo) => {
+      rotation.set(dragStartRotation.current + info.offset.x * DRAG_SENSITIVITY);
+    },
+    [rotation],
+  );
 
-  const onPanEnd = (_: unknown, info: PanInfo) => {
-    setIsDragging(false);
-    // Apply velocity-based momentum
-    const velocity = info.velocity.x * 0.15;
-    const target = rawRotation.get() + velocity;
-    animate(rawRotation, target, {
-      type: "spring",
-      velocity: info.velocity.x * 0.15,
-      damping: 40,
-      stiffness: 80,
-      onComplete: () => {
-        autoRef.current = true;
-      },
-    });
-  };
+  const onPanEnd = useCallback(
+    (_: unknown, info: PanInfo) => {
+      setIsDragging(false);
+      isDraggingRef.current = false;
+
+      const velocityDeg = info.velocity.x * DRAG_SENSITIVITY;
+
+      if (Math.abs(velocityDeg) > 5) {
+        // Momentum: animate from current position with fling velocity
+        momentumActiveRef.current = true;
+        const current = rotation.get();
+        const target = current + velocityDeg * 0.4;
+
+        animate(rotation, target, {
+          type: "decay",
+          velocity: velocityDeg,
+          power: 0.4,
+          timeConstant: 200,
+          onComplete: () => {
+            momentumActiveRef.current = false;
+          },
+        });
+      }
+    },
+    [rotation],
+  );
+
+  const pauseAutoRotation = useCallback(
+    (ms = 1200) => {
+      momentumActiveRef.current = true;
+      setTimeout(() => {
+        momentumActiveRef.current = false;
+      }, ms);
+    },
+    [],
+  );
 
   // Scroll-based pitch and depth
   useEffect(() => {
