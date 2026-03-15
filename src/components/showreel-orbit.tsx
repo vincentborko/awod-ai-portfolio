@@ -4,10 +4,10 @@ import { useEffect, useMemo, useRef, useState, useCallback, type CSSProperties }
 import {
   motion,
   useMotionValue,
+  useSpring,
+  useAnimationFrame,
   useTransform,
-  animate,
   type PanInfo,
-  type AnimationPlaybackControls,
 } from "motion/react";
 
 type ShowreelVideo = {
@@ -19,8 +19,12 @@ type ShowreelOrbitProps = {
   videos: ShowreelVideo[];
 };
 
-const AUTO_SPEED = 6; // degrees per second
-const DRAG_SENSITIVITY = 0.42;
+const BASE_VELOCITY = 6; // deg/s — auto-rotation speed
+const DRAG_SENSITIVITY = 0.3; // px → deg during drag
+const DRAG_VELOCITY_SCALE = 0.3; // px/ms → deg/s on release
+
+// Spring that decays dragBoost back to 0 (= back to base velocity)
+const BOOST_SPRING = { stiffness: 50, damping: 20, restDelta: 0.01 };
 
 export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const shellRef = useRef<HTMLDivElement | null>(null);
@@ -31,48 +35,37 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const [ratios, setRatios] = useState<Record<string, number>>({});
   const [isDragging, setIsDragging] = useState(false);
 
+  // Rotation angle — accumulated imperatively, never animated to a target
   const rotation = useMotionValue(0);
   const orbitDeg = useTransform(rotation, (v) => `${v.toFixed(2)}deg`);
 
-  // Keep a handle to the current auto-rotation animation
-  const autoAnimRef = useRef<AnimationPlaybackControls | null>(null);
+  // Velocity boost from drag release — springs back to 0
+  // Total velocity = BASE_VELOCITY + dragBoost
+  // When dragBoost reaches 0, we're back to pure auto-rotation
+  const dragBoostTarget = useMotionValue(0);
+  const dragBoost = useSpring(dragBoostTarget, BOOST_SPRING);
 
-  const startAutoRotation = useCallback(() => {
-    // Start a long linear animation from current position
-    const current = rotation.get();
-    const target = current + 360 * 100; // enough for ~100 full loops
-    autoAnimRef.current = animate(rotation, target, {
-      duration: (360 * 100) / AUTO_SPEED,
-      ease: "linear",
-      repeat: 0,
-    });
-  }, [rotation]);
+  const isDraggingRef = useRef(false);
 
-  const stopAutoRotation = useCallback(() => {
-    if (autoAnimRef.current) {
-      autoAnimRef.current.stop();
-      autoAnimRef.current = null;
-    }
-  }, []);
+  // Single integration loop — always running, never stops
+  useAnimationFrame((_time, delta) => {
+    if (isDraggingRef.current) return;
 
-  // Start auto-rotation on mount
-  useEffect(() => {
-    startAutoRotation();
-    return () => stopAutoRotation();
-  }, [startAutoRotation, stopAutoRotation]);
+    const velocity = BASE_VELOCITY + dragBoost.get();
+    rotation.set(rotation.get() + velocity * (delta / 1000));
+  });
 
-  // Drag handling
-  const dragStartRotation = useRef(0);
-
+  // Drag handlers
   const onPanStart = useCallback(() => {
     setIsDragging(true);
-    stopAutoRotation();
-    dragStartRotation.current = rotation.get();
-  }, [rotation, stopAutoRotation]);
+    isDraggingRef.current = true;
+    dragBoostTarget.set(0);
+    dragBoost.jump(0);
+  }, [dragBoostTarget, dragBoost]);
 
   const onPan = useCallback(
     (_: unknown, info: PanInfo) => {
-      rotation.set(dragStartRotation.current + info.offset.x * DRAG_SENSITIVITY);
+      rotation.set(rotation.get() + info.delta.x * DRAG_SENSITIVITY);
     },
     [rotation],
   );
@@ -80,30 +73,21 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
   const onPanEnd = useCallback(
     (_: unknown, info: PanInfo) => {
       setIsDragging(false);
-      const velocityDeg = info.velocity.x * DRAG_SENSITIVITY;
+      isDraggingRef.current = false;
 
-      if (Math.abs(velocityDeg) > 5) {
-        animate(rotation, rotation.get() + velocityDeg * 0.4, {
-          type: "decay",
-          velocity: velocityDeg,
-          power: 0.4,
-          timeConstant: 200,
-          onComplete: () => startAutoRotation(),
-        });
-      } else {
-        startAutoRotation();
-      }
+      // Convert release velocity (px/ms) to deg/s, subtract base so spring decays to 0
+      const releaseDegPerS = info.velocity.x * DRAG_VELOCITY_SCALE * 1000;
+      const boost = releaseDegPerS - BASE_VELOCITY;
+      dragBoostTarget.set(boost);
     },
-    [rotation, startAutoRotation],
+    [dragBoostTarget],
   );
 
   const onCardClick = useCallback(
     (index: number) => {
       setActiveIndex(index);
-      stopAutoRotation();
-      setTimeout(() => startAutoRotation(), 1200);
     },
-    [stopAutoRotation, startAutoRotation],
+    [],
   );
 
   // Scroll-based pitch and depth
