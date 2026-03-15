@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback, type CSSProperties } from "re
 import {
   motion, useMotionValue, useSpring, useAnimationFrame, useTransform, type PanInfo,
 } from "motion/react";
+import { OrbitCard } from "./OrbitCard";
 
 type ReelItem = { title: string; src: string };
 
@@ -53,7 +54,7 @@ export function ShowreelPreview({ items }: { items: ReelItem[] }) {
     const stage = stageRef.current, scene = sceneRef.current;
     if (!stage || !scene) return;
     const update = () => {
-      stage.style.setProperty("--orbit-radius", `${Math.max(230, Math.min(scene.clientWidth * 0.4, 620)).toFixed(1)}px`);
+      stage.style.setProperty("--orbit-radius", `${Math.max(140, Math.min(scene.clientWidth * 0.25, 360)).toFixed(1)}px`);
       stage.style.setProperty("--orbit-offset-y", "0px");
     };
     update(); window.addEventListener("resize", update);
@@ -81,14 +82,17 @@ export function ShowreelPreview({ items }: { items: ReelItem[] }) {
               style={{ "--orbit-rotation": orbitDeg } as CSSProperties & Record<string, unknown>}>
               {items.map((item, index) => {
                 const ratio = ratios[item.src] ?? 9 / 16;
-                const oc = ratio >= 1.2 ? "is-landscape" : ratio <= 0.82 ? "is-portrait" : "is-square";
                 return (
-                  <button className={`orbit-card ${oc} ${activeIndex === index ? "is-active" : ""}`}
-                    key={item.src} onClick={() => setActiveIndex(index)} type="button"
+                  <div className="orbit-item" key={item.src}
                     style={{ "--item-index": String(index), "--item-total": String(items.length), "--card-ratio": ratio.toString() } as CSSProperties}>
-                    <video src={item.src} autoPlay loop muted playsInline preload="metadata"
-                      onLoadedMetadata={(e) => handleMeta(item.src, e.currentTarget.videoWidth, e.currentTarget.videoHeight)} />
-                  </button>
+                    <OrbitCard
+                      className={activeIndex === index ? "is-active" : ""}
+                      onClick={() => setActiveIndex(index)}
+                    >
+                      <video src={item.src} autoPlay loop muted playsInline preload="metadata"
+                        onLoadedMetadata={(e) => handleMeta(item.src, e.currentTarget.videoWidth, e.currentTarget.videoHeight)} />
+                    </OrbitCard>
+                  </div>
                 );
               })}
             </motion.div>

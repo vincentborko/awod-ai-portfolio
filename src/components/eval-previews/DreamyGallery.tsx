@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback, type CSSProperties } from "re
 import {
   motion, useMotionValue, useSpring, useAnimationFrame, useTransform, type PanInfo,
 } from "motion/react";
+import { OrbitCard } from "./OrbitCard";
 
 type GalleryItem = { title: string; src: string };
 
@@ -53,7 +54,7 @@ export function DreamyGallery({ items }: { items: GalleryItem[] }) {
     const stage = stageRef.current, scene = sceneRef.current;
     if (!stage || !scene) return;
     const update = () => {
-      stage.style.setProperty("--orbit-radius", `${Math.max(280, Math.min(scene.clientWidth * 0.44, 700)).toFixed(1)}px`);
+      stage.style.setProperty("--orbit-radius", `${Math.max(160, Math.min(scene.clientWidth * 0.28, 400)).toFixed(1)}px`);
       stage.style.setProperty("--orbit-offset-y", "0px");
     };
     update(); window.addEventListener("resize", update);
@@ -74,13 +75,15 @@ export function DreamyGallery({ items }: { items: GalleryItem[] }) {
                 const ratio = ratios[item.src] ?? 0.75;
                 const oc = ratio >= 1.2 ? "is-landscape" : ratio <= 0.82 ? "is-portrait" : "is-square";
                 return (
-                  <div className={`dreamy-card ${oc}`} key={item.src}
+                  <div className={`dreamy-item ${oc}`} key={item.src}
                     style={{ "--item-index": String(index), "--item-total": String(items.length), "--card-ratio": ratio.toString() } as CSSProperties}>
-                    <img src={item.src} alt={item.title} draggable={false}
-                      onLoad={(e) => {
-                        const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
-                        if (w && h) setRatios((prev) => (prev[item.src] ? prev : { ...prev, [item.src]: w / h }));
-                      }} />
+                    <OrbitCard>
+                      <img src={item.src} alt={item.title} draggable={false}
+                        onLoad={(e) => {
+                          const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
+                          if (w && h) setRatios((prev) => (prev[item.src] ? prev : { ...prev, [item.src]: w / h }));
+                        }} />
+                    </OrbitCard>
                   </div>
                 );
               })}

@@ -9,27 +9,57 @@ import {
   useTransform,
   type PanInfo,
 } from "motion/react";
+import { OrbitCard } from "./OrbitCard";
 
 type OrbitItem = { title: string; src: string };
 
+export type DepthEffects = {
+  /** Cards closer scale up, further scale down */
+  scale?: { front: number; back: number };
+  /** Darken overlay opacity (0 = none, 1 = full black) */
+  darken?: { front: number; back: number };
+  /** Blur in px */
+  blur?: { front: number; back: number };
+  /** Card opacity */
+  opacity?: { front: number; back: number };
+};
+
 const SPRING_CONFIG = { stiffness: 50, damping: 20, restDelta: 0.01 };
 
-export function OrbitCarousel({ items, baseVelocity = 6, dragSensitivity = 0.3, dragVelocityScale = 0.3 }: {
-  items: OrbitItem[]; baseVelocity?: number; dragSensitivity?: number; dragVelocityScale?: number;
+export function OrbitCarousel({ items, baseVelocity = 6, dragSensitivity = 0.3, dragVelocityScale = 0.3, depthEffects }: {
+  items: OrbitItem[]; baseVelocity?: number; dragSensitivity?: number; dragVelocityScale?: number; depthEffects?: DepthEffects;
 }) {
   const shellRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const sceneRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
   const safeItems = useMemo(() => items.slice(0, 12), [items]);
   const [isDragging, setIsDragging] = useState(false);
   const rotation = useMotionValue(0);
   const orbitDeg = useTransform(rotation, (v) => `${v.toFixed(2)}deg`);
   const dragBoost = useSpring(0, SPRING_CONFIG);
   const isDraggingRef = useRef(false);
+  const hasDepth = !!depthEffects;
 
   useAnimationFrame((_time, delta) => {
-    if (isDraggingRef.current) return;
-    rotation.set(rotation.get() + (baseVelocity + dragBoost.get()) * (delta / 1000));
+    if (!isDraggingRef.current) {
+      rotation.set(rotation.get() + (baseVelocity + dragBoost.get()) * (delta / 1000));
+    }
+
+    // Update --depth-z on each card
+    if (hasDepth) {
+      const rot = rotation.get();
+      const total = safeItems.length;
+      for (let i = 0; i < total; i++) {
+        const el = itemRefs.current[i];
+        if (!el) continue;
+        const angleDeg = ((360 / total) * i + rot) % 360;
+        const angleRad = (angleDeg * Math.PI) / 180;
+        // cos gives 1 at front (0°), -1 at back (180°). Normalize to 0–1.
+        const depthZ = (Math.cos(angleRad) + 1) / 2;
+        el.style.setProperty("--depth-z", depthZ.toFixed(3));
+      }
+    }
   });
 
   const onPanStart = useCallback(() => { setIsDragging(true); isDraggingRef.current = true; dragBoost.jump(0); }, [dragBoost]);
@@ -59,7 +89,7 @@ export function OrbitCarousel({ items, baseVelocity = 6, dragSensitivity = 0.3, 
     const stage = stageRef.current, scene = sceneRef.current;
     if (!stage || !scene) return;
     const update = () => {
-      stage.style.setProperty("--orbit-radius", `${Math.max(230, Math.min(scene.clientWidth * 0.4, 620)).toFixed(1)}px`);
+      stage.style.setProperty("--orbit-radius", `${Math.max(150, Math.min(scene.clientWidth * 0.26, 380)).toFixed(1)}px`);
       stage.style.setProperty("--orbit-offset-y", "0px");
     };
     update();
@@ -68,6 +98,25 @@ export function OrbitCarousel({ items, baseVelocity = 6, dragSensitivity = 0.3, 
   }, []);
 
   if (safeItems.length === 0) return null;
+
+  // Build CSS custom properties for depth effect config on the ring
+  const depthVars: Record<string, string> = {};
+  if (depthEffects?.scale) {
+    depthVars["--de-scale-front"] = String(depthEffects.scale.front);
+    depthVars["--de-scale-back"] = String(depthEffects.scale.back);
+  }
+  if (depthEffects?.darken) {
+    depthVars["--de-darken-front"] = String(depthEffects.darken.front);
+    depthVars["--de-darken-back"] = String(depthEffects.darken.back);
+  }
+  if (depthEffects?.blur) {
+    depthVars["--de-blur-front"] = String(depthEffects.blur.front);
+    depthVars["--de-blur-back"] = String(depthEffects.blur.back);
+  }
+  if (depthEffects?.opacity) {
+    depthVars["--de-opacity-front"] = String(depthEffects.opacity.front);
+    depthVars["--de-opacity-back"] = String(depthEffects.opacity.back);
+  }
 
   return (
     <div className="orbit-shell" ref={shellRef}>
@@ -78,11 +127,14 @@ export function OrbitCarousel({ items, baseVelocity = 6, dragSensitivity = 0.3, 
             <div className="orbit-aura" aria-hidden="true" />
             <p className="orbit-hint">Drag to rotate</p>
             <motion.div className="orbit-ring"
-              style={{ "--orbit-rotation": orbitDeg } as CSSProperties & Record<string, unknown>}>
+              style={{ "--orbit-rotation": orbitDeg, ...depthVars } as CSSProperties & Record<string, unknown>}>
               {safeItems.map((item, index) => (
-                <div className="orbit-card" key={item.src}
-                  style={{ "--item-index": String(index), "--item-total": String(safeItems.length), "--card-ratio": "1" } as CSSProperties}>
-                  <img src={item.src} alt={item.title} draggable={false} />
+                <div className={`orbit-item ${hasDepth ? "has-depth" : ""}`} key={item.src}
+                  ref={(el) => { itemRefs.current[index] = el; }}
+                  style={{ "--item-index": String(index), "--item-total": String(safeItems.length), "--card-ratio": "1", "--depth-z": "0.5" } as CSSProperties}>
+                  <OrbitCard darkenOverlay={!!depthEffects?.darken}>
+                    <img src={item.src} alt={item.title} draggable={false} />
+                  </OrbitCard>
                 </div>
               ))}
             </motion.div>

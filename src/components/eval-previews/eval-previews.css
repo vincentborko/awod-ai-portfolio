@@ -30,7 +30,7 @@
   position: relative;
   border: none;
   border-radius: 0;
-  min-height: 320px;
+  min-height: 440px;
   overflow: visible;
   cursor: grab;
   user-select: none;
@@ -61,28 +61,73 @@
     rotateX(calc(8deg + (var(--scroll-pitch) * 0.5))) rotateZ(-0.9deg);
 }
 
-.orbit-card {
+/* ── Shared reusable card wrapper ── */
+.orbit-card-wrap {
   all: unset;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  transform: translate3d(0, 0, 0);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.6);
+}
+.orbit-card-wrap img, .orbit-card-wrap video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  background: transparent;
+}
+.orbit-card-wrap.is-active {
+  border-color: rgba(255, 255, 255, 0.52);
+}
+
+/* ── Orbit positioning (applied via parent) ── */
+.orbit-item {
   position: absolute; left: 50%; top: 50%;
-  width: clamp(180px, 20vw, 300px);
+  width: clamp(110px, 12vw, 170px);
   aspect-ratio: var(--card-ratio, 1);
-  border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.2);
-  overflow: hidden; cursor: pointer;
   transform: translate(-50%, -50%)
     rotateY(calc((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation)))
     translateZ(calc(var(--orbit-radius) + var(--depth-shift)))
     rotateY(calc(-1 * ((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation))));
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.6);
   backface-visibility: hidden; will-change: transform;
 }
 
-.orbit-card img, .orbit-card video {
-  display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none;
+/* ── Depth effects (driven by --depth-z: 0=back, 1=front) ── */
+.orbit-item.has-depth {
+  --depth-z: 0.5;
+}
+.orbit-item.has-depth .orbit-card-wrap {
+  transform:
+    translate3d(0, 0, 0)
+    scale(calc(
+      var(--de-scale-back, 1) + (var(--de-scale-front, 1) - var(--de-scale-back, 1)) * var(--depth-z)
+    ));
+  filter: blur(calc(
+    (var(--de-blur-back, 0) + (var(--de-blur-front, 0) - var(--de-blur-back, 0)) * var(--depth-z)) * 1px
+  ));
+  opacity: calc(
+    var(--de-opacity-back, 1) + (var(--de-opacity-front, 1) - var(--de-opacity-back, 1)) * var(--depth-z)
+  );
 }
 
-.orbit-card.is-active {
-  border-color: rgba(255, 255, 255, 0.52);
-  box-shadow: 0 28px 62px rgba(0, 0, 0, 0.74);
+/* Darken overlay inside card */
+.orbit-card-darken {
+  position: absolute;
+  inset: 0;
+  background: black;
+  pointer-events: none;
+  opacity: calc(
+    var(--de-darken-front, 0) + (var(--de-darken-back, 0) - var(--de-darken-front, 0)) * (1 - var(--depth-z, 0.5))
+  );
 }
 
 /* ── Focus Player ── */
@@ -117,7 +162,7 @@
 .dreamy-layout { display: grid; grid-template-columns: 1fr; gap: 0; align-items: center; padding: 0; }
 .dreamy-scene {
   position: relative; border: none; border-radius: 0;
-  min-height: 320px; overflow: visible; cursor: grab;
+  min-height: 440px; overflow: visible; cursor: grab;
   user-select: none; -webkit-user-select: none; touch-action: pan-y;
   background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
     linear-gradient(180deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.72));
@@ -139,21 +184,17 @@
   transform: translate3d(0, var(--orbit-offset-y), 0)
     rotateX(calc(8deg + (var(--scroll-pitch) * 0.5))) rotateZ(-0.9deg);
 }
-.dreamy-card {
-  all: unset; position: absolute; left: 50%; top: 50%;
-  width: clamp(140px, 15vw, 220px); aspect-ratio: var(--card-ratio, 0.75);
-  border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.15);
-  overflow: hidden;
+.dreamy-item {
+  position: absolute; left: 50%; top: 50%;
+  width: clamp(120px, 13vw, 190px); aspect-ratio: var(--card-ratio, 0.75);
   transform: translate(-50%, -50%)
     rotateY(calc((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation)))
     translateZ(calc(var(--orbit-radius) + var(--depth-shift)))
     rotateY(calc(-1 * ((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation))));
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.6);
   backface-visibility: hidden; will-change: transform;
 }
-.dreamy-card.is-landscape { width: clamp(180px, 18vw, 280px); }
-.dreamy-card.is-square { width: clamp(160px, 16vw, 240px); }
-.dreamy-card img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.dreamy-item.is-landscape { width: clamp(160px, 17vw, 250px); }
+.dreamy-item.is-square { width: clamp(140px, 15vw, 220px); }
 
 /* ── Preview page ── */
 .preview-grid {
