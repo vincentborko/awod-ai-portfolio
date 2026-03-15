@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/data/site";
+import { getBaseUrl, toAbsoluteUrl } from "@/lib/site-url";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? site.siteUrl;
+  const baseUrl = getBaseUrl();
   const routes = [
-    "",
+    "/",
     "/portfolio",
     "/services",
     "/about",
@@ -14,9 +14,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return routes.map((route) => ({
-    url: `${baseUrl}${route}`,
+    url: toAbsoluteUrl(route, baseUrl),
     lastModified: new Date(),
-    changeFrequency: route === "" ? "weekly" : "monthly",
-    priority: route === "" ? 1 : 0.7,
+    changeFrequency: route === "/" ? "weekly" : "monthly",
+    priority: route === "/" ? 1 : 0.7,
   }));
 }

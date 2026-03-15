@@ -2,7 +2,7 @@ export const site = {
   name: "AWOD.AI",
   title: "Cinematic AI visuals that feel real",
   description:
-    "AI-driven video and visual assets for brands, agencies, artists, and founders who need premium output at high speed.",
+    "AI-driven video and visual assets for brands, agencies, artists, and founders who need fast, high-quality delivery.",
   siteUrl: "https://awod-ai-portfolio.vercel.app",
   primaryCta: "Book a Call",
   secondaryCta: "See Work",
@@ -44,13 +44,13 @@ export const seoKeywords = [
 
 export const tickerItems = [
   "Cinematic AI Video",
-  "AI Commercial Production",
+  "Campaign Visual Production",
   "Creative Direction",
-  "Short-Form Systems",
-  "Brand Visual Consistency",
-  "Prompt Engineering",
+  "Short-Form Production",
+  "Brand Consistency",
+  "Prompt Workflows",
   "Launch-Ready Assets",
-  "Remote EU & International",
+  "Remote Collaboration (EU & Global)",
 ];
 
 export const navLinks = [
@@ -63,44 +63,44 @@ export const navLinks = [
 
 export const stats = [
   { label: "First concept", value: "24-72h" },
-  { label: "Core Focus", value: "AI Video + Visuals" },
-  { label: "Workflow", value: "Strategy -> Launch" },
+  { label: "Core focus", value: "AI Video + Visuals" },
+  { label: "Workflow", value: "Brief -> Concept -> Delivery" },
 ];
 
 export const trustSignals = [
   {
     label: "Typical First Draft Window",
     value: "24-72h",
-    note: "Initial direction arrives fast after a clear brief.",
+    note: "Initial direction is delivered quickly after a clear brief.",
   },
   {
     label: "Delivery Style",
     value: "Platform-ready formats",
-    note: "Assets are framed and exported for the actual channel.",
+    note: "Assets are prepared for the channels where they will be published.",
   },
   {
     label: "Collaboration Model",
     value: "Direct founder communication",
-    note: "No handoff maze. Decisions stay quick and clear.",
+    note: "You work directly with one person from briefing to delivery.",
   },
 ];
 
 export const decisionPath = [
   {
     title: "See the fit",
-    detail: "Scan selected work and check whether style and quality match your brand lane.",
+    detail: "Review selected work and decide whether the style matches your brand.",
     action: "Open selected cases",
     href: "#portfolio-preview",
   },
   {
     title: "Define the scope",
-    detail: "Pick the output type and timeline so production starts with clear constraints.",
+    detail: "Choose deliverables and timeline so production starts with clear boundaries.",
     action: "Review services",
     href: "/services",
   },
   {
     title: "Start the project",
-    detail: "Book one call, align goals, and move straight into production.",
+    detail: "Book one call, align goals, and start production.",
     action: "Book a Call",
     href: "/contact",
   },
@@ -110,7 +110,7 @@ export const services = [
   {
     title: "AI Commercial Assets",
     description:
-      "Campaign-ready AI visuals and ad-ready videos with a clear hook, message, and CTA.",
+      "Campaign visuals and ad videos with clear messaging and consistent art direction.",
     details: [
       "Creative direction and concept",
       "Visual consistency for brand campaigns",
@@ -120,7 +120,7 @@ export const services = [
   {
     title: "Cinematic Short-Form",
     description:
-      "High-end social assets that look premium, move fast, and are built for conversion and retention.",
+      "Short-form social assets designed for strong pacing, clarity, and fast iteration.",
     details: [
       "Reels / Shorts visual packages",
       "Fast iteration loops",
@@ -130,7 +130,7 @@ export const services = [
   {
     title: "AI Creative Systems",
     description:
-      "Prompt and workflow systems that let teams produce more without losing visual quality.",
+      "Prompt and workflow systems that help teams scale output without losing quality.",
     details: [
       "Prompt architecture",
       "Look and style consistency setup",

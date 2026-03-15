@@ -1,15 +1,15 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/data/site";
+import { getBaseUrl, toAbsoluteUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? site.siteUrl;
+  const baseUrl = getBaseUrl();
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: toAbsoluteUrl("/sitemap.xml", baseUrl),
     host: baseUrl,
   };
 }

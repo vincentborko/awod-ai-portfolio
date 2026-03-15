@@ -183,6 +183,7 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
                   <button
                     className={`showreel-orbit-card ${orientationClass} ${activeIndex === index ? "is-active" : ""}`}
                     key={video.src}
+                    aria-label={`Showreel video ${index + 1}`}
                     onClick={() => {
                       setActiveIndex(index);
                       interactionUntilRef.current = performance.now() + 1200;
@@ -205,7 +206,6 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
                         )
                       }
                     />
-                    <span>{video.title}</span>
                   </button>
                 );
               })}
@@ -214,7 +214,6 @@ export function ShowreelOrbit({ videos }: ShowreelOrbitProps) {
 
           <article className="showreel-focus">
             <p className="section-kicker">Focused Asset</p>
-            <h3>{activeVideo.title}</h3>
             <div
               className={`showreel-focus-frame ${activeOrientation}`}
               style={{ aspectRatio: activeRatio.toString() }}

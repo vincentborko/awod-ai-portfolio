@@ -11,10 +11,12 @@ import {
   faqs,
   services,
   site,
+  socials,
   tickerItems,
   toCaseAnchor,
   trustSignals,
 } from "@/data/site";
+import { getBaseUrl, toAbsoluteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -26,26 +28,57 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  const serviceStructuredData = {
+  const baseUrl = getBaseUrl();
+  const organizationId = toAbsoluteUrl("#organization", baseUrl);
+  const websiteId = toAbsoluteUrl("#website", baseUrl);
+  const serviceId = toAbsoluteUrl("#service", baseUrl);
+  const faqId = toAbsoluteUrl("#faq", baseUrl);
+
+  const homeStructuredData = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: site.name,
-    description: site.description,
-    url: site.siteUrl,
-    areaServed: "EU and international (remote)",
-    sameAs: ["https://www.instagram.com/awod.ai/"],
-  };
-  const faqStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": organizationId,
+        name: site.name,
+        url: baseUrl,
+        logo: toAbsoluteUrl("/media/branding/awod-icon.png", baseUrl),
+        email: `mailto:${site.email}`,
+        sameAs: socials.map((social) => social.href),
       },
-    })),
+      {
+        "@type": "WebSite",
+        "@id": websiteId,
+        url: baseUrl,
+        name: site.name,
+        publisher: {
+          "@id": organizationId,
+        },
+      },
+      {
+        "@type": "ProfessionalService",
+        "@id": serviceId,
+        name: site.name,
+        description: site.description,
+        url: baseUrl,
+        areaServed: "EU and international (remote)",
+        provider: {
+          "@id": organizationId,
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": faqId,
+        mainEntity: faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.answer,
+          },
+        })),
+      },
+    ],
   };
 
   return (
@@ -53,11 +86,7 @@ export default function Home() {
       <main>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceStructuredData) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
         />
         <HomeRail />
         <HeroVideoStage />
@@ -86,9 +115,9 @@ export default function Home() {
               <header className="home-chapter-head">
                 <p className="home-chapter-tag">Chapter 01</p>
                 <p className="section-kicker">What You Get</p>
-                <h2 className="section-title">A creative system built to convert attention.</h2>
+                <h2 className="section-title">Clear creative direction and delivery.</h2>
                 <p className="section-copy">
-                  Every output is mapped to one outcome: make the next user action obvious and easy.
+                  Each project follows a structured path from brief to final, platform-ready assets.
                 </p>
               </header>
               <div className="service-flow-grid">
@@ -115,7 +144,7 @@ export default function Home() {
               <div>
                 <p className="home-chapter-tag">Chapter 02</p>
                 <p className="section-kicker">Decision Path</p>
-                <h2 className="section-title">Three steps from first impression to project start.</h2>
+                <h2 className="section-title">Three simple steps to start.</h2>
               </div>
               <Link className="button-primary" href="/contact">
                 Book a Call
@@ -142,9 +171,9 @@ export default function Home() {
               <div>
                 <p className="home-chapter-tag">Chapter 03</p>
                 <p className="section-kicker">Selected Work</p>
-                <h2 className="section-title">Proof before promises.</h2>
+                <h2 className="section-title">Selected client work.</h2>
                 <p className="section-copy">
-                  Quick sample view here. Full case breakdowns and assets are on the portfolio page.
+                  Preview selected projects here. Full case breakdowns and assets are in the portfolio.
                 </p>
               </div>
               <Link className="button-secondary" href="/portfolio">
@@ -186,9 +215,9 @@ export default function Home() {
               <header className="home-faq-head">
                 <p className="home-chapter-tag">Chapter 04</p>
                 <p className="section-kicker">Buyer FAQ</p>
-                <h2 className="section-title">The key questions before a serious call.</h2>
+                <h2 className="section-title">Common questions before booking.</h2>
                 <p className="section-copy">
-                  Buyers evaluate risk, speed, and clarity before they reach out. This section answers all three.
+                  Short answers on scope, timing, licensing, and onboarding.
                 </p>
               </header>
               <div className="faq-pillar-list">
@@ -214,7 +243,7 @@ export default function Home() {
           <div className="shell cta-band">
             <div>
               <p className="section-kicker">Primary Conversion</p>
-              <h2 className="section-title">Ready to launch your next campaign system?</h2>
+              <h2 className="section-title">Need assets for your next campaign?</h2>
             </div>
             <div className="hero-cta-row">
               <Link className="button-primary" href="/contact">

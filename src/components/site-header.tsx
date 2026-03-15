@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { BrandLogo } from "@/components/brand-logo";
 import { navLinks, site } from "@/data/site";
 
 export function SiteHeader() {
@@ -20,8 +21,8 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="shell">
         <div className="header-inner">
-          <Link className="brand" href="/" onClick={() => setIsMenuOpen(false)}>
-            {site.name}
+          <Link className="brand" href="/" onClick={() => setIsMenuOpen(false)} aria-label={`${site.name} home`}>
+            <BrandLogo priority />
           </Link>
           <nav className="nav-links" aria-label="Primary">
             {navLinks.map((link) => (

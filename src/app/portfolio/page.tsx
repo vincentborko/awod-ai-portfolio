@@ -22,10 +22,9 @@ export default function PortfolioPage() {
           <div className="shell">
             <p className="home-chapter-tag">Chapter 01</p>
             <p className="section-kicker">Video Showreel</p>
-            <h2 className="section-title">Immersive motion showreel</h2>
+            <h2 className="section-title">Showreel</h2>
             <p className="section-copy">
-              Assets are arranged in a continuously moving horizontal 3D carousel.
-              The focus player changes only when you select a new clip.
+              Select a clip in the orbit to load it in the focus player.
             </p>
             <ShowreelOrbit videos={showreelVideos} />
           </div>
@@ -35,11 +34,10 @@ export default function PortfolioPage() {
           <div className="shell page-hero">
             <p className="home-chapter-tag">Chapter 02</p>
             <p className="section-kicker">Portfolio</p>
-            <h1 className="section-title">See the work. Then book with confidence.</h1>
+            <h1 className="section-title">Selected projects and outcomes.</h1>
             <p className="section-copy">
-              Real client outputs, clear outcomes, and production quality you
-              can verify in minutes. If the fit is right, book one call and we
-              map your next asset sprint.
+              Each case includes challenge, process, result, and final assets.
+              Review the fit, then book a call if you want to discuss your project.
             </p>
             <div className="hero-cta-row">
               <Link className="button-primary" href="/contact">
@@ -121,8 +119,7 @@ export default function PortfolioPage() {
 
             <div className="case-cta-strip">
               <p>
-                Need this structure for your brand? We can build campaign-ready AI
-                visual systems with fast review loops and platform-ready delivery.
+                If you need a similar structure, we can define a scope and timeline in one call.
               </p>
               <Link className="button-secondary" href="/contact">
                 Book a Call

@@ -4,6 +4,7 @@ import { ScrollProgress } from "@/components/scroll-progress";
 import { SiteHeader } from "@/components/site-header";
 import { UiMotionController } from "@/components/ui-motion-controller";
 import { seoKeywords, site } from "@/data/site";
+import { getBaseUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const headingFont = Bebas_Neue({
@@ -18,7 +19,7 @@ const bodyFont = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? site.siteUrl),
+  metadataBase: new URL(getBaseUrl()),
   title: {
     default: "AWOD.AI | Cinematic AI Portfolio",
     template: "%s | AWOD.AI",

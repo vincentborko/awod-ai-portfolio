@@ -13,8 +13,6 @@ const CURSOR_TRAIL_IMAGES = [
   "/media/trail/trail-05.jpg",
 ];
 
-const HERO_BADGES = ["Founder-led execution", "Commercial-safe workflow", "First concepts in 24-72h"];
-
 export function HeroVideoStage() {
   const stageRef = useRef<HTMLDivElement | null>(null);
   const pointerInsideRef = useRef(false);
@@ -223,11 +221,6 @@ export function HeroVideoStage() {
       <div className="home-hero-vfx-noise" aria-hidden="true" />
 
       <div className="shell home-hero-content">
-        <div className="home-hero-badges" aria-label="Positioning highlights">
-          {HERO_BADGES.map((badge) => (
-            <span key={badge}>{badge}</span>
-          ))}
-        </div>
         <p className="section-kicker">AI Creative Portfolio</p>
         <h1 className="home-hero-title">
           Cinematic AI Assets

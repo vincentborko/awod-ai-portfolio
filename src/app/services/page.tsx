@@ -20,10 +20,10 @@ export default function ServicesPage() {
           <div className="shell page-hero">
             <p className="home-chapter-tag">Chapter 01</p>
             <p className="section-kicker">Services</p>
-            <h1 className="section-title">Built for Results, Not Just Output</h1>
+            <h1 className="section-title">Services and project scope</h1>
             <p className="section-copy">
-              Pricing is discussed in a booking call by design. Scope depends on
-              goals, speed, and required output depth.
+              Scope and pricing are defined in the first call based on goals,
+              timeline, and deliverables.
             </p>
           </div>
         </section>
@@ -33,9 +33,9 @@ export default function ServicesPage() {
             <header className="page-section-head">
               <p className="home-chapter-tag">Chapter 02</p>
               <p className="section-kicker">Offer Stack</p>
-              <h2 className="section-title">Services built for campaign execution.</h2>
+              <h2 className="section-title">Choose the output lane first.</h2>
               <p className="section-copy">
-                Pick the output lane first, then scale depth and speed based on timeline.
+                Then define volume, timeline, and review rounds.
               </p>
             </header>
             <div className="card-grid page-card-grid">
@@ -49,8 +49,7 @@ export default function ServicesPage() {
                     ))}
                   </ul>
                   <p className="service-scope-note">
-                    Scope and quote are defined in the booking call based on
-                    deliverables, timeline, and revision depth.
+                    Final quote depends on deliverables, timeline, and revision depth.
                   </p>
                 </article>
               ))}
@@ -63,7 +62,7 @@ export default function ServicesPage() {
             <div>
               <p className="home-chapter-tag">Chapter 03</p>
               <p className="section-kicker">Next Step</p>
-              <h2 className="section-title">Book a Call.</h2>
+              <h2 className="section-title">Book an intro call.</h2>
             </div>
             <Link className="button-primary" href="/contact">
               Book a Call
