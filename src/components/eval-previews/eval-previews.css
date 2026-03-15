@@ -1,0 +1,185 @@
+/* ── Shared Orbit Carousel styles ── */
+
+.orbit-shell { width: 100%; min-height: auto; }
+
+.orbit-stage {
+  --orbit-rotation: 0deg;
+  --scroll-pitch: 0deg;
+  --depth-shift: 0px;
+  --orbit-radius: 280px;
+  --orbit-offset-y: 0px;
+  position: relative;
+  border: 1px solid #2f2f2f;
+  border-radius: 24px;
+  background: radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+  overflow: hidden;
+  perspective: 2600px;
+  perspective-origin: 50% 42%;
+  transform-style: preserve-3d;
+}
+
+.orbit-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  align-items: center;
+  padding: 0;
+}
+
+.orbit-scene {
+  position: relative;
+  border: none;
+  border-radius: 0;
+  min-height: 320px;
+  overflow: visible;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: pan-y;
+  background: none;
+}
+
+.orbit-scene.is-dragging { cursor: grabbing; }
+
+.orbit-hint {
+  position: absolute; left: 1rem; top: 0.9rem; z-index: 4; margin: 0;
+  border: 1px solid #3e3e3e; border-radius: 999px;
+  padding: 0.26rem 0.62rem; font-size: 0.64rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: #d6d6d6; background: rgba(11, 11, 11, 0.58); backdrop-filter: blur(6px);
+}
+
+.orbit-aura {
+  position: absolute; left: 50%; top: 50%; width: 68%; height: 78%;
+  translate: -50% -50%; border-radius: 50%; filter: blur(44px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.17), transparent 72%);
+}
+
+.orbit-ring {
+  position: absolute; inset: 0; display: block; transform-style: preserve-3d;
+  transform: translate3d(0, var(--orbit-offset-y), 0)
+    rotateX(calc(8deg + (var(--scroll-pitch) * 0.5))) rotateZ(-0.9deg);
+}
+
+.orbit-card {
+  all: unset;
+  position: absolute; left: 50%; top: 50%;
+  width: clamp(180px, 20vw, 300px);
+  aspect-ratio: var(--card-ratio, 1);
+  border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden; cursor: pointer;
+  transform: translate(-50%, -50%)
+    rotateY(calc((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation)))
+    translateZ(calc(var(--orbit-radius) + var(--depth-shift)))
+    rotateY(calc(-1 * ((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation))));
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.6);
+  backface-visibility: hidden; will-change: transform;
+}
+
+.orbit-card img, .orbit-card video {
+  display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none;
+}
+
+.orbit-card.is-active {
+  border-color: rgba(255, 255, 255, 0.52);
+  box-shadow: 0 28px 62px rgba(0, 0, 0, 0.74);
+}
+
+/* ── Focus Player ── */
+.orbit-focus {
+  position: relative; z-index: 3; width: 100%; max-width: min(1040px, 100%);
+  justify-self: center; border: 1px solid #3b3b3b; border-radius: 16px;
+  margin: 1rem; padding: 1rem; background: rgba(10, 10, 10, 0.78);
+  backdrop-filter: blur(8px); box-shadow: 0 18px 46px rgba(0, 0, 0, 0.4);
+}
+.orbit-focus-player { width: 100%; height: 100%; object-fit: cover; }
+.orbit-focus-frame {
+  width: 100%; margin: 0 auto; max-height: min(25vh, 250px);
+  border-radius: 12px; overflow: hidden; background: #0a0a0a;
+}
+.orbit-focus-frame.is-landscape { width: 100%; max-height: min(60vh, 700px); }
+.orbit-focus-frame.is-square { width: min(78%, 680px); max-height: min(66vh, 720px); }
+.orbit-focus-frame.is-portrait { width: min(44%, 420px); max-height: min(74vh, 820px); }
+.orbit-focus-frame video, .orbit-focus-frame img {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 12px;
+}
+
+/* ── Dreamy Gallery ── */
+.dreamy-shell { margin-top: 1.4rem; }
+.dreamy-stage {
+  --orbit-rotation: 0deg; --scroll-pitch: 0deg; --depth-shift: 0px;
+  --orbit-radius: 200px; --orbit-offset-y: 0px;
+  position: relative; border: 1px solid #2f2f2f; border-radius: 24px;
+  background: radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.01));
+  overflow: hidden; perspective: 2600px; perspective-origin: 50% 42%;
+  transform-style: preserve-3d;
+}
+.dreamy-layout { display: grid; grid-template-columns: 1fr; gap: 0; align-items: center; padding: 0; }
+.dreamy-scene {
+  position: relative; border: none; border-radius: 0;
+  min-height: 320px; overflow: visible; cursor: grab;
+  user-select: none; -webkit-user-select: none; touch-action: pan-y;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015)),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.46), rgba(0, 0, 0, 0.72));
+}
+.dreamy-scene.is-dragging { cursor: grabbing; }
+.dreamy-hint {
+  position: absolute; left: 1rem; top: 0.9rem; z-index: 4; margin: 0;
+  border: 1px solid #3e3e3e; border-radius: 999px; padding: 0.26rem 0.62rem;
+  font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: #d6d6d6; background: rgba(11, 11, 11, 0.58); backdrop-filter: blur(6px);
+}
+.dreamy-aura {
+  position: absolute; left: 50%; top: 50%; width: 72%; height: 82%;
+  translate: -50% -50%; border-radius: 50%; filter: blur(54px);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.13), transparent 72%);
+}
+.dreamy-ring {
+  position: absolute; inset: 0; display: block; transform-style: preserve-3d;
+  transform: translate3d(0, var(--orbit-offset-y), 0)
+    rotateX(calc(8deg + (var(--scroll-pitch) * 0.5))) rotateZ(-0.9deg);
+}
+.dreamy-card {
+  all: unset; position: absolute; left: 50%; top: 50%;
+  width: clamp(140px, 15vw, 220px); aspect-ratio: var(--card-ratio, 0.75);
+  border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  transform: translate(-50%, -50%)
+    rotateY(calc((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation)))
+    translateZ(calc(var(--orbit-radius) + var(--depth-shift)))
+    rotateY(calc(-1 * ((360deg / var(--item-total)) * var(--item-index) + var(--orbit-rotation))));
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.6);
+  backface-visibility: hidden; will-change: transform;
+}
+.dreamy-card.is-landscape { width: clamp(180px, 18vw, 280px); }
+.dreamy-card.is-square { width: clamp(160px, 16vw, 240px); }
+.dreamy-card img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+/* ── Preview page ── */
+.preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+}
+.preview-section {
+  padding: 0.8rem;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  background: #0d0d0d;
+}
+.preview-section h2 { margin: 0 0 0.3rem; font-size: 0.95rem; color: #f0f0f0; }
+.preview-section p { margin: 0 0 0.6rem; color: #999; font-size: 0.7rem; }
+.preview-section--full { grid-column: 1 / -1; }
+.preview-section--full .orbit-layout {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 1024px) {
+  .orbit-stage { --orbit-radius: 270px; --orbit-offset-y: 18px; }
+  .orbit-scene { min-height: 78vh; }
+  .orbit-card { width: clamp(120px, 22vw, 170px); }
+  .dreamy-stage { --orbit-radius: 300px; --orbit-offset-y: 18px; }
+  .dreamy-scene { min-height: 78vh; }
+  .dreamy-card { width: clamp(170px, 28vw, 240px); }
+}
